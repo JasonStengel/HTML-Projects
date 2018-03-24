@@ -40,7 +40,7 @@
 		var pendulum = {mass: 100, length:300, theta: (Math.PI/2) - .40, omega: 0, alpha:0, J:0};
 		//function to call looped draw function
 		function init() {
-		  pendulum.J = pendulum.mass * pendulum.length * pendulum.length / 100;
+		  pendulum.J = pendulum.mass * pendulum.length * pendulum.length / 200;
 		  
 		  lastTime = new Date();
 		  requestAnimFrame(draw);  
