@@ -20,15 +20,93 @@
     }
   </style>
   <script>
-		var angle=0;var canvas=ctx=false;var frameRate=1/40;var frameDelay=frameRate * 1000;var loopTimer=false;
-		var lastTime=false;window.requestAnimFrame=(function(){return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || 
-		function( callback ){window.setTimeout(callback, 1000 / 60);};})();var pendulum={mass: 100, length:300, theta: (Math.PI/2) - 0.05, omega: 0, alpha:0, J:0};
-		function init(){pendulum.J=pendulum.mass * pendulum.length * pendulum.length / 500; lastTime=new Date(); requestAnimFrame(draw);}var draw=function(){var width=1000, height=600; 
-		var len=150;var timeMs=(new Date()).getTime();var deltaT=(timeMs - lastTime.getTime()) / 1000;canvas=document.getElementById("myCanvas"); var ctx=canvas.getContext("2d");
-		if (deltaT > 0.050){deltaT=0.050;}deltaT=0.01;time=new Date(timeMs);pendulum.theta +=pendulum.omega * deltaT + ( .5 * pendulum.alpha * deltaT * deltaT );var T=pendulum.mass * 9.81 * Math.cos(pendulum.theta) * pendulum.length;
-		var alpha=T / pendulum.J;pendulum.omega +=0.5 * (alpha + pendulum.alpha) * deltaT;pendulum.alpha=alpha;var bobX=width/2 + pendulum.length * Math.cos(pendulum.theta);
-		var bobY=pendulum.length * Math.sin(pendulum.theta); ctx.clearRect(0,0,width,height)ctx.strokeStyle="green"; ctx.beginPath(); ctx.moveTo(width/2,0); 
-		ctx.lineTo(bobX,bobY);ctx.stroke();ctx.closePath();ctx.fillStyle="red";ctx.beginPath(); ctx.arc(bobX,bobY,16,0 ,Math.PI * 2, false); ctx.fill();ctx.closePath(); requestAnimationFrame(draw);}init();
+		//basic pendulum created in javaScript
+		var angle = 0;
+		var canvas = ctx = false;
+		var frameRate = 1/40;
+		var frameDelay = frameRate * 1000;
+		var loopTimer = false;
+		var lastTime = false;
+
+		window.requestAnimFrame = (function(){
+			return  window.requestAnimationFrame       || 
+				window.webkitRequestAnimationFrame || 
+				window.mozRequestAnimationFrame    || 
+				window.oRequestAnimationFrame      || 
+				window.msRequestAnimationFrame     || 
+				function( callback ){
+					window.setTimeout(callback, 1000 / 60);
+				};
+		})();
+		var pendulum = {mass: 100, length:300, theta: (Math.PI/2) - .40, omega: 0, alpha:0, J:0};
+		//function to call looped draw function
+		function init() {
+		  pendulum.J = pendulum.mass * pendulum.length * pendulum.length / 100;
+		  
+		  lastTime = new Date();
+		  requestAnimFrame(draw);  
+		}
+
+		//recursive funcion to create the pendulum
+			  var draw = function(){
+			  var width = 1000, height = 600;
+			  var len = 150;
+			var timeMs = (new Date()).getTime();
+			var deltaT = (timeMs - lastTime.getTime()) / 1000;
+			
+			//creates an object of the canvas called myCanvas
+			canvas = document.getElementById("myCanvas");
+			  var ctx = canvas.getContext("2d");
+
+			if (deltaT > 0.050)
+			{
+				deltaT = 0.050;
+			}
+			deltaT = 0.01;
+
+			time = new Date(timeMs);
+			
+			/* Calculate current position from last frame's position*/
+			pendulum.theta += pendulum.omega * deltaT + ( .5 * pendulum.alpha * deltaT * deltaT );
+			
+			/* calculates force */
+			var T = pendulum.mass * 9.81 * Math.cos(pendulum.theta) * pendulum.length;
+			
+			/* Current acceleration */
+			var alpha = T / pendulum.J;
+			
+			// Calculate current velocity from last frame's velocity and
+			pendulum.omega += .5 * (alpha + pendulum.alpha) * deltaT;
+			
+			/* Update acceleration */
+			pendulum.alpha = alpha;
+			
+			//sets the current x and y for the pendulum
+			var bobX = width/2 + pendulum.length * Math.cos(pendulum.theta);
+			var bobY = pendulum.length * Math.sin(pendulum.theta);
+			
+			//clears the canvas
+			  ctx.clearRect(0,0,width,height)
+			
+			//canvas line
+			ctx.strokeStyle = "green";
+			  ctx.beginPath();
+			  ctx.moveTo(width/2,0);
+			  ctx.lineTo(bobX,bobY);
+			ctx.stroke();
+			ctx.closePath();
+			ctx.fillStyle = "red";
+			
+			//canvas pendulum
+			ctx.beginPath();
+			  ctx.arc(bobX,bobY,16,0 ,Math.PI * 2 , false);
+			  ctx.fill();
+			ctx.closePath();
+			
+		   //callback for the recursive function
+			 requestAnimationFrame(draw);
+			}
+			init();
   </script>
 </head>
 <div href="#0" class="button"> 
